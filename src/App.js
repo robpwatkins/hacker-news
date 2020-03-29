@@ -5,55 +5,34 @@ import Articles from './Articles';
 
 class App extends React.Component {
   state = {
-    query: '',
-    author: '',
-    querySubmitted: '',
-    dropDown: '--choose--',
     list: [],
-  }
-
-  updateQuery = props => {
-    this.setState({ query: props.target.value });
-    // console.log(this.state.query);
+    querySubmitted: false
   }
   
   fetchData = props => {
-    const query = this.state.query;
-    const author = this.state.author;
+    this.setState({ querySubmitted: true })
+    const query = props;
+    const author = props;
+    console.log(author);
     const queryURL = `http://hn.algolia.com/api/v1/search?query=${query}`;
     const authorURL = `${queryURL}&tags=author_${author}`;
-    const dateURL = `http://hn.algolia.com/api/v1/search_by_date?query=${query}`;
-    let url = queryURL;
+    // const dateURL = `http://hn.algolia.com/api/v1/search_by_date?query=${query}`;
+    let url;
+    if (!this.state.querySubmitted) {
+      url = queryURL;
+    } else {
+      url = authorURL;
+    }
     fetch(url).then(response => response.json())
     .then(json => {
       this.setState({ list: [...json.hits] })
     })
   }
   
-  submitQuery = props => {
-    props.preventDefault();
-    this.setState({ query: props.target.value });
-    this.fetchData();
-    this.setState({ query: '' });
-  }
-  
-  handleChange = props => {
-    this.setState({ dropDown: props.target.value })
-    console.log(this.state.dropDown);
-  }
-
   render() {
     return (
       <div className="App">
-        <SearchForm 
-          updatequery={this.updateQuery} 
-          submitquery={this.submitQuery} 
-          handlechange={this.handleChange}
-          query={this.state.query}
-          author={this.state.author}
-          querysubmitted={this.state.querySubmitted}
-          dropdown={this.state.dropDown}
-        />
+        <SearchForm fetchdata={this.fetchData} />
         <Articles list={this.state.list}/>
       </div>
     );
