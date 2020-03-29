@@ -57,27 +57,30 @@ class SearchForm extends React.Component {
   render () {
     return (
       <div>
-        { !this.state.querySubmitted &&
-        <form>
-          <input name="query" onChange={event => this.updateInput(event)} value={this.state.query}></input>
-          <button onClick={event => this.onSubmit(event)}>Submit</button>
-        </form>
+        { 
+          !this.state.querySubmitted &&
+          <form>
+            <input name="query" onChange={event => this.updateInput(event)} value={this.state.query}></input>
+            <button onClick={event => this.onSubmit(event)}>Submit</button>
+          </form>
         }
         {
           this.state.querySubmitted &&
-        <form>
-          <input name={this.state.dropDown} onChange={event => this.updateInput(event)} placeholder={
-            this.state.dropDown === '--choose--'
-            ? 'Search articles by' : `Enter ${this.state.dropDown}`
-            } value={ this.state.author }>
+          <form>
+            <input 
+              name={this.state.dropDown} 
+              onChange={event => this.updateInput(event)} 
+              placeholder={this.state.dropDown === '--choose--' ? 'Search articles by' : `Enter ${this.state.dropDown}`} 
+              value={ this.state.dropDown === 'author' ? this.state.author : this.state.date}
+            >
             </input>
-            <select onChange={event => this.handleChange(event)} >
-              <option>--choose--</option>
-              <option>author</option>
-              <option>date</option>
-            </select>
-            <button onClick={event => this.onSubmit(event)}>Submit</button>
-        </form>
+              <select onChange={event => this.handleChange(event)} >
+                <option>--choose--</option>
+                <option>author</option>
+                <option>date</option>
+              </select>
+              <button onClick={event => this.onSubmit(event)}>Submit</button>
+          </form>
         }
       </div>
     )
