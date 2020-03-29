@@ -16,7 +16,7 @@ class App extends React.Component {
     return (
       <div className="App">
         <SearchForm updatelist={this.updateList} />
-        <Articles list={this.state.list}/>
+        <Articles list={this.state.list} />
       </div>
     );
   }

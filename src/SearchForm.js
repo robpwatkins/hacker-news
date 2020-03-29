@@ -22,32 +22,29 @@ class SearchForm extends React.Component {
       querySubmitted: true
     });
     this.fetchData();
-    console.log(this.state.author);
     this.setState({ 
       author: ''
     });
   }
 
   fetchData = () => {
-    const query = this.state.query;
-    const author = this.state.author;
+    const {query, author, dropDown} = this.state;
     const queryURL = `http://hn.algolia.com/api/v1/search?query=${query}`;
     const authorURL = `${queryURL}&tags=author_${author}`;
     const dateURL = `http://hn.algolia.com/api/v1/search_by_date?query=${query}`;
     let url;
-    if (this.state.dropDown === '--choose--') {
+    if (dropDown === '--choose--') {
       url = queryURL;
     } else {
-      if (this.state.dropDown === 'author') {
+      if (dropDown === 'author') {
         url = authorURL;
       } else {
         url = dateURL;
       }
     }
-    fetch(url).then(response => response.json())
-    .then(json => {
-      this.props.updatelist(json.hits);
-    })
+    fetch(url)
+      .then(response => response.json())
+      .then(json => this.props.updatelist(json.hits))
   }
   
   handleChange = event => {
@@ -55,23 +52,24 @@ class SearchForm extends React.Component {
   }
 
   render () {
+    const {query, author, date, querySubmitted, dropDown} = this.state;
     return (
       <div>
         { 
-          !this.state.querySubmitted &&
+          !querySubmitted &&
           <form>
-            <input name="query" onChange={event => this.updateInput(event)} value={this.state.query}></input>
+            <input name="query" onChange={event => this.updateInput(event)} value={query}></input>
             <button onClick={event => this.onSubmit(event)}>Submit</button>
           </form>
         }
         {
-          this.state.querySubmitted &&
+          querySubmitted &&
           <form>
             <input 
-              name={this.state.dropDown} 
+              name={dropDown} 
               onChange={event => this.updateInput(event)} 
-              placeholder={this.state.dropDown === '--choose--' ? 'Search articles by' : `Enter ${this.state.dropDown}`} 
-              value={ this.state.dropDown === 'author' ? this.state.author : this.state.date}
+              placeholder={dropDown === '--choose--' ? 'Search articles by' : `Enter ${dropDown}`} 
+              value={ dropDown === 'author' ? author : date}
             >
             </input>
               <select onChange={event => this.handleChange(event)} >
