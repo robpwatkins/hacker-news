@@ -55,15 +55,12 @@ class SearchForm extends React.Component {
     const {query, author, date, querySubmitted, dropDown} = this.state;
     return (
       <div>
-        { 
-          !querySubmitted &&
+        { !querySubmitted &&
           <form>
             <input name="query" onChange={event => this.updateInput(event)} value={query}></input>
             <button onClick={event => this.onSubmit(event)}>Submit</button>
-          </form>
-        }
-        {
-          querySubmitted &&
+          </form> }
+        { querySubmitted &&
           <form>
             <input 
               name={dropDown} 
@@ -78,8 +75,7 @@ class SearchForm extends React.Component {
                 <option>date</option>
               </select>
               <button onClick={event => this.onSubmit(event)}>Submit</button>
-          </form>
-        }
+          </form> }
       </div>
     )
   }
